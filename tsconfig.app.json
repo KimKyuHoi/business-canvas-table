@@ -20,7 +20,20 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /*alias path*/
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["./src/components/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "types/*": ["./src/types/*"],
+      "utils/*": ["./src/utils/*"],
+      "pages/*": ["./src/pages/*"]
+    },
+
+    /*emotion*/
+    "jsxImportSource": "@emotion/react"
   },
   "include": ["src"]
 }
