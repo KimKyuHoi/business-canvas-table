@@ -29,7 +29,8 @@
       "hooks/*": ["./src/hooks/*"],
       "types/*": ["./src/types/*"],
       "utils/*": ["./src/utils/*"],
-      "pages/*": ["./src/pages/*"]
+      "pages/*": ["./src/pages/*"],
+      "storage/*": ["./src/storage/*"]
     },
 
     /*emotion*/

@@ -19,6 +19,7 @@ export default defineConfig({
       types: path.resolve(__dirname, './src/types'),
       utils: path.resolve(__dirname, './src/utils'),
       pages: path.resolve(__dirname, './src/shared'),
+      storage: path.resolve(__dirname, './src/storage'),
     },
   },
 });
