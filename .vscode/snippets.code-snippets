@@ -1,0 +1,49 @@
+{
+  "Util Function": {
+    "prefix": "/util",
+    "body": [
+      "export function ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}}() {",
+      "  return <></>;",
+      "  $0",
+      "}"
+    ],
+    "description": "유틸 함수를 생성합니다. (입력한 파일명을 PascalCase로 변환)"
+  },
+  "Custom Hook": {
+    "prefix": "/hook",
+    "body": [
+      "export const ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} = () => {",
+      "  return <></>;",
+      "  $0",
+      "};"
+    ],
+    "description": "커스텀 훅 템플릿입니다. (입력한 파일명을 PascalCase로 변환)"
+  },
+  "File Template": {
+    "prefix": "/file",
+    "body": [
+      "const ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} = () => {",
+      "  return <></>;",
+      "  $0",
+      "};",
+      "",
+      "export default ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}};"
+    ],
+    "description": "파일 템플릿입니다. (입력한 파일명을 PascalCase로 변환)"
+  },
+  "API Template": {
+    "prefix": "/api",
+    "body": [
+      "export type Props = {",
+      "};",
+      "",
+      "const ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}}Path = () => '';",
+      "",
+      "export const ${1} = async (): Promise<> => {",
+      "",
+      "  return <></>;",
+      "};"
+    ],
+    "description": "API 템플릿. 파일명 입력 시, 이름이 PascalCase로 변환되어 사용됩니다."
+  }
+}
