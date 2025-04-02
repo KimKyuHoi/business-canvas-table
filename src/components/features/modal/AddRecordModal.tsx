@@ -1,39 +1,20 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Form, Modal, ModalProps } from 'antd';
+import { Modal, ModalProps } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
 import { CustomButton } from 'components/common';
-import { AddFormData } from 'types/FormData';
 
 import AddRecordForm from './AddRecordForm';
-import { FORM_FIELDS } from 'constants/formField';
-import { useMemo } from 'react';
+
+import { useAddRecordForm } from 'hooks/modal';
 
 type AddRecordModalProps = Pick<ModalProps, 'open' | 'onCancel'>;
 
 const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
-  const [form] = Form.useForm<AddFormData>();
-
-  const REQUIRED_FIELDS: (keyof AddFormData)[] = FORM_FIELDS.filter(
-    (f) => f.required
-  ).map((f) => f.value as keyof AddFormData);
-
-  const values = Form.useWatch([], form);
-
-  const isDisabled = useMemo(() => {
-    if (!values) return true;
-    return REQUIRED_FIELDS.some((field) => !values[field]);
-  }, [values, REQUIRED_FIELDS]);
-
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      console.log(JSON.stringify(values, null, 2));
-    } catch (e) {
-      console.log('Validation Failed', e);
-    }
-  };
+  const { form, isDisabled, handleSubmit } = useAddRecordForm((values) => {
+    console.log('valueData', values);
+  });
 
   return (
     <Modal
