@@ -4,3 +4,4 @@ export * from './textarea';
 export * from './datepicker';
 export * from './select';
 export * from './checkbox';
+export * from './label';
