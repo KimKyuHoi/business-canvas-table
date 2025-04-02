@@ -3,9 +3,7 @@ import { css } from '@emotion/react';
 import { OptionValue } from 'types/SelectOption';
 
 type CustomSelectProps = {
-  defaultValue: OptionValue;
   options: { value: OptionValue; label: string }[];
-  onChange: (value: OptionValue) => void;
 } & Omit<SelectProps, 'size' | 'defaultValue' | 'options'>;
 
 const selectBaseStyle = css`
@@ -27,16 +25,9 @@ const selectBaseStyle = css`
   }
 `;
 
-const CustomSelect = ({
-  onChange,
-  options,
-  defaultValue,
-  ...rest
-}: CustomSelectProps) => {
+const CustomSelect = ({ options, ...rest }: CustomSelectProps) => {
   return (
     <AntSelect
-      onChange={onChange}
-      defaultValue={defaultValue}
       options={options}
       popupClassName="custom-dropdown"
       dropdownStyle={{
