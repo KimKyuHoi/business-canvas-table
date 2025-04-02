@@ -29,9 +29,9 @@ const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      console.log('제출 데이터:', JSON.stringify(values, null, 2));
+      console.log(JSON.stringify(values, null, 2));
     } catch (e) {
-      console.log('❌ Validation Failed', e);
+      console.log('Validation Failed', e);
     }
   };
 
