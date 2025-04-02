@@ -5,25 +5,21 @@ import { ReactNode } from 'react';
 type CustomButtonProps = {
   children?: ReactNode;
   icon?: ReactNode;
-  color?: 'primary' | 'default';
-  variant?: 'solid' | 'text';
+  type?: 'primary' | 'text';
   disabled?: boolean;
 } & React.ComponentProps<typeof AntButton>;
 
 const CustomButton = ({
   children,
   icon,
-  color = 'primary',
-  variant = 'solid',
+  type,
   disabled,
   ...rest
 }: CustomButtonProps) => {
   return (
     <AntButton
-      type="text"
       icon={icon}
-      color={color}
-      variant={variant}
+      type={type}
       disabled={disabled}
       css={css`
         padding: 0 12px;
