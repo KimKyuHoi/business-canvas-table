@@ -1,5 +1,6 @@
 import MainPage from 'pages/main';
 import { ConfigProvider } from 'antd';
+import GlobalStyle from 'styles/GlobalStyle';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
         },
       }}
     >
-      <MainPage />;
+      <GlobalStyle />
+      <MainPage />
     </ConfigProvider>
   );
 }
