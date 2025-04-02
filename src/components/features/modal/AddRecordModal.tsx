@@ -7,31 +7,31 @@ import { CustomButton } from 'components/common';
 import { AddFormData } from 'types/FormData';
 
 import AddRecordForm from './AddRecordForm';
+import { FORM_FIELDS } from 'constants/formField';
+import { useMemo } from 'react';
 
 type AddRecordModalProps = Pick<ModalProps, 'open' | 'onCancel'>;
 
 const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
   const [form] = Form.useForm<AddFormData>();
 
-  const handleFinish = (values: AddFormData) => {
-    const formData: AddFormData = {
-      name: values.name,
-      address: values.address,
-      memo: values.memo,
-      join_date: values.join_date,
-      job: values.job,
-      receive_email: values.receive_email,
-    };
+  const REQUIRED_FIELDS: (keyof AddFormData)[] = FORM_FIELDS.filter(
+    (f) => f.required
+  ).map((f) => f.value as keyof AddFormData);
 
-    console.log(JSON.stringify(formData, null, 2));
-  };
+  const values = Form.useWatch([], form);
+
+  const isDisabled = useMemo(() => {
+    if (!values) return true;
+    return REQUIRED_FIELDS.some((field) => !values[field]);
+  }, [values, REQUIRED_FIELDS]);
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      handleFinish(values);
-    } catch (error) {
-      console.log('❌ Validation Failed', error);
+      console.log('제출 데이터:', JSON.stringify(values, null, 2));
+    } catch (e) {
+      console.log('❌ Validation Failed', e);
     }
   };
 
@@ -63,8 +63,13 @@ const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
             `}
           >
             <CustomButton onClick={onCancel}>취소</CustomButton>
-            <CustomButton key="submit" type="primary" onClick={handleSubmit}>
-              추가
+            <CustomButton
+              key="submit"
+              type="primary"
+              onClick={handleSubmit}
+              disabled={isDisabled}
+            >
+              저장
             </CustomButton>
           </div>
         </ModalFooter>
