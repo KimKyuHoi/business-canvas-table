@@ -2,43 +2,48 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Modal, ModalProps } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-
 import { CustomButton } from 'components/common';
-
-import AddRecordForm from './AddRecordForm';
-
 import { useAddRecordForm } from 'hooks/modal';
-
-import type { AddFormData } from 'types/FormData';
+import AddRecordForm from './AddRecordForm';
+import type {
+  AddFormData,
+  AddFormDataWithDayjs,
+  DataType,
+} from 'types/FormData';
+import { updateRecord, addRecord } from 'utils/storage/recordStorage';
 
 type AddRecordModalProps = Pick<ModalProps, 'open' | 'onCancel'> & {
-  defaultValues?: AddFormData | null;
+  defaultValues?: DataType | null;
+  onSubmit: () => void;
 };
 
 const AddRecordModal = ({
   onCancel,
   open,
   defaultValues,
+  onSubmit,
 }: AddRecordModalProps) => {
-  const { form, isDisabled, handleSubmit } = useAddRecordForm((values) => {
-    console.log('valueData', values);
-  }, defaultValues);
+  const { form, isDisabled, handleSubmit } = useAddRecordForm(
+    (values: AddFormDataWithDayjs) => {
+      const payload: AddFormData = {
+        ...values,
+        join_date: values.join_date?.format('YYYY-MM-DD') || '',
+      };
+
+      if (defaultValues?.key) {
+        updateRecord(defaultValues.key, payload);
+      } else {
+        addRecord(payload);
+      }
+
+      onSubmit();
+    },
+    defaultValues
+  );
 
   return (
     <Modal
       title={null}
-      css={css`
-        .ant-modal-content {
-          padding: 0px;
-        }
-        .ant-modal-footer {
-          margin-top: 0px !important;
-        }
-
-        .ant-form-item {
-          margin-bottom: 20px !important;
-        }
-      `}
       open={open}
       onCancel={onCancel}
       closable={false}
@@ -63,6 +68,17 @@ const AddRecordModal = ({
           </div>
         </ModalFooter>
       }
+      css={css`
+        .ant-modal-content {
+          padding: 0px;
+        }
+        .ant-modal-footer {
+          margin-top: 0px !important;
+        }
+        .ant-form-item {
+          margin-bottom: 20px !important;
+        }
+      `}
     >
       <ModalHeader>
         <div>{defaultValues ? '회원 수정' : '회원 추가'}</div>

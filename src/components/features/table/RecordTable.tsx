@@ -6,46 +6,31 @@ import {
   CustomTableFilter,
 } from 'components/common';
 import { useState } from 'react';
-import type { AddFormData } from 'types/FormData';
 
+import type { DataType } from 'types/FormData';
+import { deleteRecord, getRecords } from 'utils/storage/recordStorage';
 import { css } from '@emotion/react';
+import { getFilterOptions } from 'utils/filter';
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>['rowSelection'];
 
-type DataType = AddFormData & { key: string | number };
-
-const DATA_SOURCE = [
-  {
-    key: 1,
-    name: 'John Doe',
-    address: '서울 강남구',
-    memo: '외국인',
-    join_date: '2024-10-02',
-    job: '개발자',
-    receive_email: true,
-  },
-  {
-    key: 2,
-    name: 'Foo Bar',
-    address: '서울 서초구',
-    memo: '한국인',
-    join_date: '2024-10-01',
-    job: 'PO',
-    receive_email: false,
-  },
-];
-
 type RecordTableProps = {
+  records: DataType[];
+  setRecords: React.Dispatch<React.SetStateAction<DataType[]>>;
   onEdit: (record: DataType) => void;
 };
 
-const RecordTable = ({ onEdit }: RecordTableProps) => {
+const RecordTable = ({ records, setRecords, onEdit }: RecordTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const handleDelete = (key: string | number) => {
+    deleteRecord(key);
+    setRecords(getRecords());
   };
 
   const rowSelection: TableRowSelection<DataType> = {
@@ -63,22 +48,66 @@ const RecordTable = ({ onEdit }: RecordTableProps) => {
       title: '이름',
       dataIndex: 'name',
       width: 120,
+      filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
+        <CustomTableFilter
+          options={getFilterOptions(records, 'name')}
+          selectedKeys={selectedKeys as string[]}
+          onChange={(keys) => {
+            setSelectedKeys(keys);
+            confirm();
+          }}
+        />
+      ),
+      onFilter: (value, record) => record.name === value,
     },
     {
       title: '주소',
       dataIndex: 'address',
       width: 249,
+      filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
+        <CustomTableFilter
+          options={getFilterOptions(records, 'address')}
+          selectedKeys={selectedKeys as string[]}
+          onChange={(keys) => {
+            setSelectedKeys(keys);
+            confirm();
+          }}
+        />
+      ),
+      onFilter: (value, record) => record.address === value,
     },
     {
       title: '메모',
       dataIndex: 'memo',
       width: 249,
+      filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
+        <CustomTableFilter
+          options={getFilterOptions(records, 'memo')}
+          selectedKeys={selectedKeys as string[]}
+          onChange={(keys) => {
+            setSelectedKeys(keys);
+            confirm();
+          }}
+        />
+      ),
+      onFilter: (value, record) => record.memo === value,
     },
     {
       title: '가입일',
       dataIndex: 'join_date',
       width: 200,
       render: (date: string) => date || '-',
+      filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
+        <CustomTableFilter
+          options={getFilterOptions(records, 'join_date')}
+          selectedKeys={selectedKeys as string[]}
+          onChange={(keys) => {
+            setSelectedKeys(keys);
+            confirm();
+          }}
+        />
+      ),
+      onFilter: (value, record) => record.join_date === value,
     },
     {
       title: '직업',
@@ -86,11 +115,7 @@ const RecordTable = ({ onEdit }: RecordTableProps) => {
       width: 249,
       filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
         <CustomTableFilter
-          options={[
-            { label: '개발자', value: '개발자' },
-            { label: 'PO', value: 'PO' },
-            { label: '디자이너', value: '디자이너' },
-          ]}
+          options={getFilterOptions(records, 'job')}
           selectedKeys={selectedKeys as string[]}
           onChange={(keys) => {
             setSelectedKeys(keys);
@@ -105,7 +130,6 @@ const RecordTable = ({ onEdit }: RecordTableProps) => {
       dataIndex: 'receive_email',
       width: 150,
       render: (checked: boolean) => <CustomCheckBox checked={checked} />,
-
       filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
         <CustomTableFilter
           options={[
@@ -133,13 +157,13 @@ const RecordTable = ({ onEdit }: RecordTableProps) => {
             {
               key: 'edit',
               label: '수정',
-              onClick: (rec) => onEdit(rec),
+              onClick: () => onEdit(record),
             },
             {
               key: 'delete',
               label: '삭제',
               danger: true,
-              onClick: (rec) => console.log('Delete', rec),
+              onClick: () => handleDelete(record.key),
             },
           ]}
         />
@@ -151,7 +175,7 @@ const RecordTable = ({ onEdit }: RecordTableProps) => {
     <Table<DataType>
       rowSelection={rowSelection}
       columns={columns}
-      dataSource={DATA_SOURCE}
+      dataSource={records}
       pagination={false}
       css={css`
         .ant-table-cell {
