@@ -12,3 +12,5 @@ export interface AddFormData {
 export type AddFormDataWithDayjs = Omit<AddFormData, 'join_date'> & {
   join_date?: dayjs.Dayjs;
 };
+
+export type DataType = AddFormData & { key: string | number };
