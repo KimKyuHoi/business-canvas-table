@@ -1,23 +1,23 @@
 {
   "Util Function": {
-    "prefix": "/util",
+    "prefix": "/function",
     "body": [
       "export function ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}}() {",
       "  return <></>;",
       "  $0",
       "}"
     ],
-    "description": "유틸 함수를 생성합니다. (입력한 파일명을 PascalCase로 변환)"
+    "description": "export function 템플릿입니다. (입력한 파일명을 PascalCase로 변환)"
   },
   "Custom Hook": {
-    "prefix": "/hook",
+    "prefix": "/const",
     "body": [
       "export const ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} = () => {",
       "  return <></>;",
       "  $0",
       "};"
     ],
-    "description": "커스텀 훅 템플릿입니다. (입력한 파일명을 PascalCase로 변환)"
+    "description": "export const 생성합니다. (입력한 파일명을 PascalCase로 변환)"
   },
   "File Template": {
     "prefix": "/file",
