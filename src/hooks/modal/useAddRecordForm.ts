@@ -1,13 +1,22 @@
 import { Form } from 'antd';
+import { useEffect, useMemo } from 'react';
 import { FORM_FIELDS } from 'constants/formField';
-import { useMemo } from 'react';
 import { AddFormData } from 'types/FormData';
+import dayjs from 'dayjs';
+import type { AddFormDataWithDayjs } from 'types/FormData';
 
-export const useAddRecordForm = (onSuccess: (data: AddFormData) => void) => {
-  const [form] = Form.useForm<AddFormData>();
+export const useAddRecordForm = (
+  onSuccess: (data: AddFormData) => void,
+  defaultValues?: AddFormData | null
+) => {
+  const [form] = Form.useForm<AddFormDataWithDayjs>();
 
-  const requiredFields = FORM_FIELDS.filter((f) => f.required).map(
-    (f) => f.value as keyof AddFormData
+  const requiredFields = useMemo(
+    () =>
+      FORM_FIELDS.filter((f) => f.required).map(
+        (f) => f.value as keyof AddFormData
+      ),
+    []
   );
 
   const values = Form.useWatch([], form);
@@ -17,10 +26,29 @@ export const useAddRecordForm = (onSuccess: (data: AddFormData) => void) => {
     return requiredFields.some((field) => !values[field]);
   }, [values, requiredFields]);
 
+  useEffect(() => {
+    if (defaultValues) {
+      const patchedValues: AddFormDataWithDayjs = {
+        ...defaultValues,
+
+        join_date: defaultValues.join_date
+          ? dayjs(defaultValues.join_date)
+          : undefined,
+      };
+      form.setFieldsValue(patchedValues);
+    } else {
+      form.resetFields();
+    }
+  }, [defaultValues, form]);
+
   const handleSubmit = async () => {
     try {
-      const values = await form.validateFields();
-      onSuccess(values);
+      const parsedValues: AddFormData = {
+        ...values,
+        join_date: dayjs(values.join_date).format('YYYY-MM-DD'),
+      };
+
+      onSuccess(parsedValues);
     } catch (e) {
       console.log('Validation Failed', e);
     }
