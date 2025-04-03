@@ -1,14 +1,12 @@
 import { Checkbox as AntCheckBox, CheckboxProps } from 'antd';
 import { css } from '@emotion/react';
 
-type CustomCheckBoxProps = {
-  disabled?: CheckboxProps['disabled'];
-};
+type CustomCheckBoxProps = CheckboxProps;
 
-const CustomCheckBox = ({ disabled }: CustomCheckBoxProps) => {
+const CustomCheckBox = (props: CustomCheckBoxProps) => {
   return (
     <AntCheckBox
-      disabled={disabled}
+      {...props}
       css={css`
         border-radius: 6px;
       `}
