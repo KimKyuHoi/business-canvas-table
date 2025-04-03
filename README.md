@@ -4,8 +4,8 @@ Business Canvas frontend 사전과제입니다.
 
 ## 기술선택
 
-Core: React, TypeScript
-CSS: Emotion, Ant Design
+- **Core**: React, TypeScript
+- **CSS**: Emotion, Ant Design
 
 ## 아키텍처 및 환경 설계
 
@@ -81,10 +81,11 @@ export function getFilterOptions(list: DataType[], key: keyof DataType) {
 
 ### 저장 기능 구현
 
-과제 요구사항에 따라 저장 방식은 `.env`의 `STORAGE` 값을 통해 **`in-memory`** 또는 **`local-storage`** 중 선택할 수 있도록 구현했습니다. 저는 이 중에서 `local-storage` 옵션을 선택하여 개발을 진행했습니다.
+.env의 `VITE_STORAGE` 값에 따라 `in-memory` 또는 `local-storage` 중 저장 방식을 선택할 수 있도록 구현했습니다.
 
-- `STORAGE`가 `local-storage`로 설정된 경우, **브라우저의 로컬 스토리지에 데이터를 저장하고 복구**하도록 구성했습니다. 이로 인해 개발 서버를 재시작하거나 브라우저를 새로고침하더라도 기존 데이터가 유지됩니다.
-- 저장 로직은 `recordStorage`라는 **유틸 함수로 추상화**하여, `localStorage` 혹은 `in-memory` 환경에 따라 적절한 저장 방식이 사용되도록 구현했습니다.
-- 또한 초기 데이터 주입 시점은 **서버 구동 시 한 번만 실행**되도록 처리하여, 불필요한 중복 초기화가 발생하지 않도록 했습니다.
+과제에서는 `local-storage`를 기준으로 개발했으며, 브라우저 새로고침이나 서버 재시작 이후에도 데이터가 유지됩니다.
 
-이러한 방식으로 **요구된 저장 방식 전환 기능을 완전하게 구현**했고, 추후 다른 저장 방식으로도 확장 가능하도록 고려한 구조로 설계했습니다.
+- `storage`라는 공통 인터페이스를 만들어 실제 저장 방식은 `inMemoryStorage` 또는 `localStorageStorage` 중 하나를 선택합니다.
+- 두 방식 모두 동일한 메서드(`getItem`, `setItem`, `removeItem`, `clear`)를 가지며, 내부 구현만 다릅니다.
+- `.env`의 설정값에 따라 손쉽게 확장 가능한 구조로 설계했으며, 추후 `indexedDB`, `sessionStorage` 등으로의 확장도 용이합니다.
+- 최초 렌더 시 초기 데이터는 한 번만 주입되며, 이후에는 해당 저장소를 기준으로 CRUD가 동작합니다.
