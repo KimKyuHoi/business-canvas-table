@@ -9,12 +9,20 @@ import AddRecordForm from './AddRecordForm';
 
 import { useAddRecordForm } from 'hooks/modal';
 
-type AddRecordModalProps = Pick<ModalProps, 'open' | 'onCancel'>;
+import type { AddFormData } from 'types/FormData';
 
-const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
+type AddRecordModalProps = Pick<ModalProps, 'open' | 'onCancel'> & {
+  defaultValues?: AddFormData | null;
+};
+
+const AddRecordModal = ({
+  onCancel,
+  open,
+  defaultValues,
+}: AddRecordModalProps) => {
   const { form, isDisabled, handleSubmit } = useAddRecordForm((values) => {
     console.log('valueData', values);
-  });
+  }, defaultValues);
 
   return (
     <Modal
@@ -50,14 +58,14 @@ const AddRecordModal = ({ onCancel, open }: AddRecordModalProps) => {
               onClick={handleSubmit}
               disabled={isDisabled}
             >
-              저장
+              {defaultValues ? '저장' : '추가'}
             </CustomButton>
           </div>
         </ModalFooter>
       }
     >
       <ModalHeader>
-        <div>회원 추가</div>
+        <div>{defaultValues ? '회원 수정' : '회원 추가'}</div>
         <CloseOutlined onClick={onCancel} />
       </ModalHeader>
       <AddRecordForm form={form} />
