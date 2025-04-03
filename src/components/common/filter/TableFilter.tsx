@@ -1,6 +1,7 @@
-import { Checkbox, CheckboxOptionType } from 'antd';
+import { CheckboxOptionType } from 'antd';
 import { css } from '@emotion/react';
 import { useState } from 'react';
+import { CustomCheckBox } from '../checkbox';
 
 type CustomTableFilterProps<T extends string | number | boolean> = {
   options: CheckboxOptionType[];
@@ -40,7 +41,7 @@ const CustomTableFilter = <T extends string | number>({
       `}
     >
       {options.map((option) => (
-        <Checkbox
+        <CustomCheckBox
           key={String(option.value)}
           checked={checkedValues.includes(option.value as T)}
           onChange={(e) => handleChange(option.value as T, e.target.checked)}
@@ -48,10 +49,11 @@ const CustomTableFilter = <T extends string | number>({
             border-radius: 6px;
             padding: 5px 12px;
             height: 32px;
+            font-size: 14px !important;
           `}
         >
           {option.label}
-        </Checkbox>
+        </CustomCheckBox>
       ))}
     </div>
   );

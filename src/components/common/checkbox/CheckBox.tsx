@@ -9,6 +9,11 @@ const CustomCheckBox = (props: CustomCheckBoxProps) => {
       {...props}
       css={css`
         border-radius: 6px;
+
+        :where(.ant-checkbox-wrapper) > span:last-of-type {
+          margin-left: 8px;
+          padding: 0px;
+        }
       `}
     />
   );
