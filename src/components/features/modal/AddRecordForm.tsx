@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { Form, FormInstance } from 'antd';
 import { CustomLabel } from 'components/common';
-import { AddFormData } from 'types/FormData';
 import { SELECT_OPTION } from 'types/SelectOption';
 import { FORM_FIELDS } from 'constants/formField';
+import type { AddFormDataWithDayjs } from 'types/FormData';
 
 type AddRecordFormProps = {
-  form: FormInstance<AddFormData>;
+  form: FormInstance<AddFormDataWithDayjs>;
 };
 
 const AddRecordForm = ({ form }: AddRecordFormProps) => {
@@ -37,6 +37,7 @@ const AddRecordForm = ({ form }: AddRecordFormProps) => {
             label={<CustomLabel label={name} required={required} />}
             name={value}
             required={false}
+            valuePropName={value === 'receive_email' ? 'checked' : 'value'}
             rules={[
               ...(required
                 ? [{ required: true, message: `${name}을(를) 입력해주세요.` }]
