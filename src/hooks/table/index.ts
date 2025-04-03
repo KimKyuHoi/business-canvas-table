@@ -1,0 +1,1 @@
+export { useRecordTable } from './useRecordTable';
